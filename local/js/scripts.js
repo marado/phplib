@@ -24,14 +24,9 @@ function showField(jsProdName,jsProdPrice,currency) {
 } 
 
 function showElement(e) {
-        if (document.all) {
-                document.all[e].style.visibility='visible';
-                document.all[e].style.display='block';
-        } else {
-                el = document.getElementById(e);
-                el.style.visibility='visible';
-                el.style.display='block';
-        }
+	el = document.getElementById(e);
+	el.style.visibility='visible';
+	el.style.display='block';
 }
 function addtocart(f) {
         q = buildQuery(f);
@@ -61,16 +56,10 @@ function login() {
         ajax(url,'Delivery');
 }
 function toggleDA() {
-        if (document.all) {
-                h = document.all["DeliveryFrame"].height;
-                if (h==0) h=350; else h=0;
-                document.all["DeliveryFrame"].height = h;
-        } else {
-                el = document.getElementById("DeliveryFrame");
-                h = el.height;
-                if (h==0) h=350; else h=0;
-                el.height = h;
-        }
+	el = document.getElementById("DeliveryFrame");
+	h = el.height;
+	if (h==0) h=350; else h=0;
+	el.height = h;
 }
 
 function Seconds(Count,Units) {
@@ -83,61 +72,23 @@ function Seconds(Count,Units) {
 }
 
 function getDivHtml(fieldToGet) {
- if (document.all||document.layers||document.getElementById){
-  if (document.all) {
-   vItem = document.all[fieldToGet].innerHTML;
-  } else if (document.layers){
-   vItem = document.fieldToGet.innerHTML;
-  } else if (document.getElementById){
-   vItem = document.getElementById(fieldToGet).innerHTML;
-  }
-  return vItem;
- }
+  return document.getElementById(fieldToGet).innerHTML;
 }
 function setDivHtml(fieldToSet,vItem) { 
- if (document.all||document.layers||document.getElementById){
-  if (document.all) {
-   document.all[fieldToSet].innerHTML = vItem;
-  } else if (document.layers){
-   document.fieldToSet.innerHTML = vItem;
-  } else if (document.getElementById){
    document.getElementById(fieldToSet).innerHTML = vItem;
-  }
- }
 }
 function addDivHtml(fieldToSet,vItem) {
- if (document.all||document.layers||document.getElementById){
-  if (document.all) {
-   document.all[fieldToSet].innerHTML += vItem;
-  } else if (document.layers){
-   document.fieldToSet.innerHTML += vItem;
-  } else if (document.getElementById){
    document.getElementById(fieldToSet).innerHTML += vItem;
-  }
- }
 }
 function setFieldValue(fieldToSet,vItem) {
- if (document.all||document.layers||document.getElementById){
-  if (document.all) {
-   document.all[fieldToSet].value = vItem;
-  } else if (document.layers){
-   document.fieldToSet.value = vItem;
-  } else if (document.getElementById){
    document.getElementById(fieldToSet).value = vItem;
-  }
- }
 }
 
 function getFieldValue(e) {
  return _(e);
 }
 function _(e) {
- if (document.all) {
-  v = document.all[e].value;
- } else if (document.getElementById) {
-  v = document.getElementById(e).value;
- } else v=0;
- return v;
+ return document.getElementById(e).value;
 }
 
 function isChecked(fieldToGet) {
@@ -232,11 +183,14 @@ if (typeof(XMLHttpRequest) == "undefined") {
   };
 }
 
-function ShowSelector(el,popup) {
-        form = el.form.elements['form_name'].value;
-        fld = el.name;
-        ajax('/find.php?Frm='+form+';Col='+fld+';v='+el.value,popup);
+function ShowSelector(el,linkdesc,action) {
+        myform = el.form.elements['form_name'].value;
+        Selector = el.name;
+        fld = Selector.replace("_Selector","");
+        el.form.elements[fld].value='';
+        old_ajax('/find.php?Frm='+myform+';Col='+Selector+';Desc='+linkdesc+';a='+action+';v=',el);
 }
+
 function ajax(url,el) {
   el = typeof(el) != 'undefined' ? el : "popup";
   var xmlHttp;
@@ -248,12 +202,12 @@ function ajax(url,el) {
       {
         if (document.all) {
                 document.all[el].innerHTML=xmlHttp.responseText;
-                document.all[el].style.display='block';
+                document.all[el].style.display='inline';
                 document.all[el].style.visibility='visible';
         } else {
                 popup = document.getElementById(el);
                 popup.innerHTML=xmlHttp.responseText;
-                popup.style.display='block';
+                popup.style.display='inline';
                 popup.style.visibility='visible';
         }
       }
@@ -423,6 +377,11 @@ function getElementValue(e)
         }
 }
 
+function show(el) {
+ el = typeof(el) != 'undefined' ? el : "popup";
+ document.getElementById(el).style.display='block';
+ document.getElementById(el).style.visibility='visible';
+}
 function hide(el) {
  el = typeof(el) != 'undefined' ? el : "popup";
  document.getElementById(el).style.display='none';
@@ -465,11 +424,7 @@ function dollarformat(thisone){
 }
 
 function dollarvalue(fieldToGet){
-  if (document.all) {
-   vField = document.all[fieldToGet].value;
-  } else if (document.getElementById) {
-   vField = document.getElementById(fieldToGet).value;
-  } else vField=0;
+  vField = document.getElementById(fieldToGet).value;
   if (vField.charAt(0)=='$') return Number(vField.substring(1,vField.length));
   else return Number(vField);
 }
@@ -493,11 +448,7 @@ function enum_set_move(obj,target) {
 }
 function enum_set_chooser(elem,set) {
         var e,f,i,p;
-	if (document.all) {
-		enum_set_popup = document.all['enum_set_popup'];
-	} else {
-		enum_set_popup = document.getElementById("enum_set_popup");
-	}
+	enum_set_popup = document.getElementById("enum_set_popup");
 	enum_set_inner_HTML = '<a onclick="this.offsetParent.style.display=\'none\';" id="close">x</a><ul>';
 	for ( o in enum_set[set] ) {
 		v = enum_set[set][o];
@@ -536,11 +487,7 @@ function enum_set_update() {
 }
 function show_debug(str) {
 	if (true) return;
-	if (document.all) {
-		popup = document.all["popup"];
-	} else {
-		popup = document.getElementById("popup");
-	}
+	popup = document.getElementById("popup");
 	str += "<br>";
 	popup.style.display='block';
 	popup.style.visibility='visible';
@@ -553,16 +500,14 @@ function show_debug(str) {
 
 function nextPage() {
 	id = 'ips_starting_with';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
 	el.value = String(Number(el.value)+Number(getFieldValue('ips_row_count')));
 	el.form.submit.click();
 }
 
 function prevPage() {
 	id = 'ips_starting_with';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
 	v = Number(el.value)-Number(getFieldValue('ips_row_count'));
 	if (v<0) v = 0;
 	el.value = v;
@@ -571,16 +516,14 @@ function prevPage() {
 
 function Jump10Pages() {
 	id = 'ips_starting_with';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
 	el.value = String(Number(el.value)+(10*Number(getFieldValue('ips_row_count'))));
 	el.form.submit.click();
 }
 
 function Back10Pages() {
 	id = 'ips_starting_with';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
 	v = Number(el.value)-(10*Number(getFieldValue('ips_row_count')));
 	if (v<0) v = 0;
 	el.value = v;
@@ -589,21 +532,18 @@ function Back10Pages() {
 
 function showSortedBy(colname) {
 	id = 'ips_sort_order';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
 	el.value = colname
 	el.form.submit.click();
 }
 function custom_query(q) {
         id = 'ips_custom_query';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
         el.value = q
 }
 function export_results(q) {
         id = 'ips_export_results';
-        if (document.all) el=document.all[id];
-        else el = document.getElementById(id);
+        el = document.getElementById(id);
         el.value = q
 }
 
@@ -632,6 +572,7 @@ function confirmsubmit(e,t,n) {
   if (e.selectedIndex==0) return false;
   count = 0;
   action = e.options[e.selectedIndex].value;
+  words = action.split(" ");
   for (i=0; i<document.forms[t].elements.length; i++) {
 	el = document.forms[t].elements[i];
         if (el.type=='checkbox') {
@@ -639,6 +580,7 @@ function confirmsubmit(e,t,n) {
         }
   }
   if (count<1) {
+	alert('No items are checked.  Please select rows first');
         e.selectedIndex=0;
         return false;
   }
@@ -647,6 +589,28 @@ function confirmsubmit(e,t,n) {
                 e.selectedIndex=0;
                 return false;
         }
+  }
+  if (words[0]=='Change') {
+	var old='';
+	for (k=2;k<words.length-1;k++){if(old.length){old=old+' ';}old=old+words[k];}
+	var newvalue = prompt('New '+words[1]+' value:',old);
+	if (newvalue==old || !newvalue) return false;
+	var el = document.createElement('input');
+	el.type='hidden';
+	el.name='new_value';
+	el.value=newvalue;
+	document.forms[t].appendChild(el);
+  }
+  if (words[0]=='Copy' || words[0]==='Move') {
+	main_form = t;
+	if(el=document.getElementById('zchdr')){
+		el.innerHTML = words[0]+" "+count+" records to zone";
+	}
+	if(el=document.getElementById('ZoneChooser')){
+		el.style.display='inline';
+		el.style.visibility='visible';
+	}
+	return false;
   }
   e.form.submit();
 }

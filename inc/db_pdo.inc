@@ -242,6 +242,30 @@ class DB_Sql {
     return $this->sth;
   }
 
+  /* public get 1 column */
+  function fetchColumn($col=0) {
+ 	if (!$this->sth) {
+	      $this->halt("fetchColumn called with no query pending.");
+	      return 0;
+	}
+	return $this->sth->fetchColumn($col);
+  }
+  /* public get all records */
+  function fetchAll() {
+ 	if (!$this->sth) {
+	      $this->halt("fetchAll called with no query pending.");
+	      return 0;
+	}
+	if ($this->sth->columnCount()>1) {
+		// Array of records (rows)
+		$data = $this->sth->fetchAll(PDO::FETCH_ASSOC); 
+		if (!$data) $data = array();  // if no records return empty array/
+	} else {
+		// Array of values
+	 	foreach ($this->sth->fetchAll(PDO::FETCH_NUM) as $row) $data[]=$row[0]; 
+	}
+	return $data;  // Always return an array,
+  }
   /* public: walk result set */
   function next_record($fetch_style=PDO::FETCH_BOTH) {
     if (!$this->sth) {
